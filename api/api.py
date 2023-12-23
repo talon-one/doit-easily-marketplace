@@ -266,7 +266,7 @@ def alive():
 @app.route("/", methods=["GET"])
 def redirect_index():
     logger.debug("loading '/' index, redirects to '/app'")
-    return redirect(url_for('app'))
+    return redirect(url_for('entitlements'))
 
 
 if __name__ == "__main__":
