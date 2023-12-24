@@ -55,7 +55,8 @@ async function approveAccount(account_id) {
       headers: {
         'Content-Type': 'application/json',
         // Authorization: `Bearer ${token}`,
-      }
+      },
+      body: JSON.stringify({account_id})
     });
     if (response.ok) {
       const text = await response.json();
