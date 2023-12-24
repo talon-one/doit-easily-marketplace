@@ -73,6 +73,14 @@
             margin-top: 10px;
             margin-bottom: -10px;
         }
+
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        .ml-16 {
+            margin-left: 16px;
+        }
     </style>
 </head>
 
@@ -120,28 +128,23 @@
             </div>
         </nav>
 
-        <div class="row">
+        <div class="row valign-wrapper mt-16">
             <!-- <div>ID: {{ account["name"].split("/")[-1] }}</div> -->
-            <div>
-                Approved:
-                {% block content %}
-                    {% if not account["is_approved"] %}
-                    <a class="tooltipped" data-delay="50" 
-                        data-position="bottom" 
-                        data-tooltip="Procurement Account NOT approved">
-                        <i class="small material-icons" style="color:red">warning</i>
-                    </a>
-                    {% else %}
-                    <a class="tooltipped" data-delay="50" 
-                        data-position="bottom" 
-                        data-tooltip="Procurement Account approved">
-                        <i class="small material-icons" style="color:green">check_circle</i>
-                    </a>
+            <span> Account is&nbsp;&nbsp;
+                <em class="{{ 'light-green-text' if account['is_approved'] else 'red-text'}} darken-1">
+                    {{"Approved" if account['is_approved'] else "NOT Approved"}}
+                </em>
+            </span>
+            {% if not account['is_approved'] %}
+                <span class="ml-16">
+                    <button
+                        class="btn"
+                        onClick="approveAccount('{{ account['name'].split('/')[-1] }}')"
+                    >
+                        <i class="material-icons left">done_all</i>Approve Account
+                    </button>
+                </span>
                     {% endif %}
-                {% endblock content %}
-                
-            </div>
-            
         </div>
 
     </div>
