@@ -2,7 +2,7 @@ import base64
 import os
 import json
 import uuid
-from flask import request, Flask, render_template, redirect, url_for
+from flask import request, Flask, render_template, redirect
 from middleware import logger, add_request_context_to_log
 import traceback
 
@@ -266,8 +266,7 @@ def alive():
 @app.route("/", methods=["GET"])
 def redirect_index():
     logger.debug("loading '/' index, redirects to '/app'")
-    return redirect(url_for('entitlements'))
-
+    return redirect("/app")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
