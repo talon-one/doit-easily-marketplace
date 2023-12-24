@@ -269,4 +269,8 @@ def redirect_index():
     return redirect("/app")
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    app.run(
+        debug=os.environ.get("LOG_LEVEL", "info")=="debug",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8080))
+    )
