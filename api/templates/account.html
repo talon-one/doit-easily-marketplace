@@ -17,6 +17,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <script src="{{ url_for('static', filename = 'approve.js') }}"></script>
+
     <style>
         :root {
             --border-color: #d0d0d0;
@@ -38,38 +40,18 @@
             font: 900 1.2em "DM Sans";
         }
 
-        .scroll {
-            margin: 20px 0 10px 0;
-            overflow: auto;
-            width: 100%;
-        }
-
-        .scroll table th:first-child,
-        table td:first-child {
-            background-color: var(--sticky-bg-color);
-            border-right: 1px solid var(--border-color);
-            left: 0;
-            position: sticky;
-        }
-
-        .scroll table th:last-child,
-        table td:last-child {
-            position: sticky;
-            right: 0;
-            background-color: var(--sticky-bg-color);
-            border-left: 1px solid var(--border-color);
-        }
-
-        .scroll td,
-        .scroll th {
-            padding: 12px;
-            white-space: nowrap;
-        }
-
         .nav-img {
             height: var(--icon_size);
             margin-top: 10px;
             margin-bottom: -10px;
+        }
+
+        .mt-16 {
+            margin-top: 16px;
+        }
+
+        .ml-16 {
+            margin-left: 16px;
         }
     </style>
 </head>
@@ -118,28 +100,23 @@
             </div>
         </nav>
 
-        <div class="row">
+        <div class="row valign-wrapper mt-16">
             <!-- <div>ID: {{ account["name"].split("/")[-1] }}</div> -->
-            <div>
-                Approved:
-                {% block content %}
-                    {% if not account["is_approved"] %}
-                    <a class="tooltipped" data-delay="50" 
-                        data-position="bottom" 
-                        data-tooltip="Procurement Account NOT approved">
-                        <i class="small material-icons" style="color:red">warning</i>
-                    </a>
-                    {% else %}
-                    <a class="tooltipped" data-delay="50" 
-                        data-position="bottom" 
-                        data-tooltip="Procurement Account approved">
-                        <i class="small material-icons" style="color:green">check_circle</i>
-                    </a>
-                    {% endif %}
-                {% endblock content %}
-                
-            </div>
-            
+            <span> Account is&nbsp;&nbsp;
+                <em class="{{ 'light-green-text' if account['is_approved'] else 'red-text'}} darken-1">
+                    {{"Approved" if account['is_approved'] else "NOT Approved"}}
+                </em>
+            </span>
+            {% if not account['is_approved'] %}
+                <span class="ml-16">
+                    <button
+                        class="btn"
+                        onClick="approveAccount('{{ account['name'].split('/')[-1] }}')"
+                    >
+                        <i class="material-icons left">done_all</i>Approve Account
+                    </button>
+                </span>
+            {% endif %}
         </div>
 
     </div>
