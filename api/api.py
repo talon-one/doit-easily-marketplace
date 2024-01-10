@@ -2,7 +2,7 @@ import base64
 import os
 import json
 import uuid
-from flask import request, Flask, render_template
+from flask import request, Flask, render_template, redirect
 from middleware import logger, add_request_context_to_log
 import traceback
 
@@ -33,13 +33,13 @@ entitlement_states = [
 ]
 
 # NOTE: we could just make this an SPA...then we don't need a server at all
-@app.route(f"/app")
+@app.route("/app")
 def entitlements():
     try:
         add_request_context_to_log(str(uuid.uuid4()))
         state = request.args.get('state', "ACTIVATION_REQUESTED")
         page_context = {}
-        logger.debug("loading index")
+        logger.debug("loading app")
         state = request.args.get("state", "ACTIVATION_REQUESTED")
         if state not in entitlement_states:
             entitlement_response = procurement_api.list_entitlements()
@@ -54,7 +54,7 @@ def entitlements():
         logger.error(e)
         return {"error": "Loading failed"}, 500
 
-@app.route(f"/app/account/<account_id>")
+@app.route("/app/account/<account_id>")
 def show_account(account_id):
     try:
         add_request_context_to_log(str(uuid.uuid4()))
@@ -262,6 +262,15 @@ def handle_subscription_message():
 def alive():
     return "", 200
 
+# redirects `/` -> `/app`
+@app.route("/", methods=["GET"])
+def redirect_index():
+    logger.debug("loading '/' index, redirects to '/app'")
+    return redirect("/app")
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    app.run(
+        debug=os.environ.get("LOG_LEVEL", "info")=="debug",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8080))
+    )
