@@ -16,3 +16,10 @@ resource "google_iap_client" "iap_client" {
   display_name = var.iap_client_display_name
   brand        =  google_iap_brand.iap_brand.name  
 }
+
+resource "google_iap_web_iam_member" "access_iap_policy" {
+  provider  = google-beta
+  project   = var.project_number
+  role      = "roles/iap.httpsResourceAccessor"
+  member    = "domain:talon.one"
+}

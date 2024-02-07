@@ -100,7 +100,7 @@ resource "google_compute_region_network_endpoint_group" "api_lb_neg" {
   provider              = google-beta
   name                  = "api-lb-neg"
   network_endpoint_type = "SERVERLESS"
-  region                = var.region
+  region                = var.cloudrun_location
   cloud_run {
     service = google_cloud_run_service.doit_easily_cloudrun_service.name
   }
