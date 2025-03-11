@@ -22,7 +22,8 @@ resource "google_cloud_run_service" "doit_easily_cloudrun_service" {
           secret_name = "settings-toml"
           #          default_mode = 292 # 0444
           items {
-            key  = var.secret_version
+            # key  = var.secret_version
+            key = google_secret_manager_secret_version.settings_toml.version
             path = "custom-settings.toml" # name of file
             #            mode = 256 # 0400
           }
@@ -66,7 +67,7 @@ resource "google_secret_manager_secret" "settings_toml" {
 resource "google_secret_manager_secret_version" "settings_toml" {
   secret      = google_secret_manager_secret.settings_toml.id
   secret_data = file("${path.module}/custom-settings.toml")
-  enabled = false
+  enabled = true
 }
 
 
